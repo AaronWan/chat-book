@@ -1,0 +1,36 @@
+{
+  "name": "chat-book",
+  "version": "0.1.0-mvp",
+  "description": "聊书 - 对话式深度阅读工具 (MVP)",
+  "type": "module",
+  "main": "backend/server.js",
+  "bin": {
+    "chat-book": "./cli.js"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "smoke": "node scripts/smoke-test.mjs",
+    "test": "bash tests/runner.sh",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:integration": "node --test tests/integration/*.test.js",
+    "test:frontend": "vitest run --config frontend/vitest.config.js",
+    "test:coverage": "vitest run --coverage --config frontend/vitest.config.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "epub2": "^3.0.2",
+    "express": "^4.19.2",
+    "multer": "^2.1.1",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.19.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "acorn": "^8.17.0",
+    "jsdom": "^22.1.0",
+    "vitest": "^2.1.9"
+  }
+}
