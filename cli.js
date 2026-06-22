@@ -300,7 +300,7 @@ async function cmdChapterStart(args) {
 async function cmdChapterMessage(args) {
   const [bookId, ch, ...rest] = args;
   if (!bookId || ch === undefined || !rest.length) err('用法: chat-book chapter message <book_id> <chapter_index> <message...>');
-  const r = await post('/api/user/chapter/message', { book_id: bookId, chapter_index: parseInt(ch), message: rest.join(' ') });
+  const r = await post('/api/user/chapter/message', { book_id: bookId, chapter_index: parseInt(ch), content: rest.join(' ') });
   if (r.skipped) return;
   out(r.data);
 }

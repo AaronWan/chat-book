@@ -98,11 +98,11 @@ router.get('/user/book/:book_id/overview', (req, res) => {
   const book = getBook(book_id);
   if (!book) return res.status(404).json({ error: '书不存在' });
   const agent = getAgent(book_id);
+  if (!agent) return res.status(404).json({ error: '智能体不存在' });
   const shelf = storage.getUserBook(userId, book_id);
   const userChapters = storage.getUserChapters(userId, book_id);
   // 把 userChapters 按 chapter_index 索引
   const chMap = new Map(userChapters.map((c) => [c.chapter_index, c]));
-
   const chapters = agent.chapters.map((c) => {
     const uc = chMap.get(c.index);
     return {
