@@ -25,7 +25,12 @@ export function buildSystemPrompt(agent, chapter, state = {}, opts = {}) {
     ? `${L.pending_questions_label}: ${state.pending_questions.join('、')}`
     : '';
 
-  return `${L.you_are}${agent.author.name}。
+  return `# 【强制指令 — 必须遵守】
+你必须且只能使用 **${L.lang_name}** 与读者进行所有对话。
+不要用其他语言。不要在回复中夹杂其他语言的词汇。
+作者名等专有名词可以直接保留原文，但所有叙述、提问、总结必须用 ${L.lang_name}。
+
+${L.you_are}${agent.author.name}。
 
 ${L.about_you}
 ${agent.author.bio}
@@ -115,19 +120,19 @@ export async function authorReply({ agent, chapter, dialogueHistory, state, lang
 export async function authorOpening({ agent, chapter, state, language = 'zh' }) {
   const L = I18N.system[language] || I18N.system.zh;
   const system = buildSystemPrompt(agent, chapter, state, { language });
-  const openingPrompt = `${L.just_started}
-${L.respond_as}${agent.author.name}${L.identity}:
-1. 简短的自我介绍或问候(可选)
-2. 抛出本章的核心命题
-3. 用一个故事或类比让抽象变具体
-4. 最后,向读者提出第一个引导性问题
-
-格式要求:
-- 100-250字
-- 自然、温暖、有故事感
-- 结尾必须有引导性问题
-- 不要说"欢迎来到第X章"这种模板话
-- 像真人在跟朋友聊天,不像在讲课`;
+  const openingPrompt =
+    L.opening_intro + '\n' +
+    L.opening_task.replace('{{name}}', agent.author.name) + '\n' +
+    '1. ' + L.opening_1 + '\n' +
+    '2. ' + L.opening_2 + '\n' +
+    '3. ' + L.opening_3 + '\n' +
+    '4. ' + L.opening_4 + '\n\n' +
+    L.opening_format + '\n' +
+    '- ' + L.opening_rule_1 + '\n' +
+    '- ' + L.opening_rule_2 + '\n' +
+    '- ' + L.opening_rule_3 + '\n' +
+    '- ' + L.opening_rule_4 + '\n' +
+    '- ' + L.opening_rule_5;
 
   return callLLM({
     system,

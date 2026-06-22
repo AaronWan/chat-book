@@ -178,28 +178,31 @@ export async function renderSettings(container) {
       el('section', { class: 'mb-6' }, [
         sectionHeader({ title: '对话语言', num: 'III · 03' }),
         el('div', { class: 'lc-card p-6' }, [
-          el('div', { class: 'lc-caption mb-4' }, '选择作者智能体与你对话使用的语言。'),
-          el('div', { class: 'grid grid-cols-1 sm:grid-cols-5 gap-3' }, (() => {
-            const wrap = el('div', {});
-            const renderLangCards = () => {
+          el('div', { class: 'lc-caption mb-4' }, '作者智能体将以此语言与你对话。新章节生效。'),
+          el('div', { class: 'flex flex-wrap gap-2' }, (() => {
+            const wrap = el('div', { class: 'flex flex-wrap gap-2' });
+            const renderLangPills = () => {
               wrap.innerHTML = '';
               LANGUAGES.forEach((lang) => {
                 const active = selectedLang === lang.code;
                 wrap.appendChild(el('button', {
-                  class: 'lc-card p-4 text-center lc-hover ' + (active ? 'lc-card-warm' : ''),
-                  style: active ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 2px var(--accent)' } : {},
+                  class: 'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-150 cursor-pointer ' +
+                    (active
+                      ? 'lc-bg-accent text-white shadow-sm'
+                      : 'lc-bg-elevated lc-text-secondary lc-hover hover:lc-bg-elevated lc-border border-[var(--border)]'),
+                  style: active ? {} : {},
                   onclick: () => {
                     selectedLang = lang.code;
-                    renderLangCards();
+                    renderLangPills();
                   }
                 }, [
-                  el('div', { style: { fontSize: '24px', marginBottom: '4px' } }, lang.flag),
-                  el('div', { class: 'text-sm font-medium' }, lang.label),
-                  active ? el('div', { class: 'lc-chip lc-chip-accent mt-1', style: { fontSize: '10px', padding: '1px 6px' } }, '✓') : null
+                  el('span', { style: { fontSize: '16px', lineHeight: 1 } }, lang.flag),
+                  el('span', {}, lang.label),
+                  active ? el('span', { class: 'ml-1', style: { opacity: 0.7, fontSize: '12px' } }, '✓') : null
                 ]));
               });
             };
-            renderLangCards();
+            renderLangPills();
             return [wrap];
           })())
         ])

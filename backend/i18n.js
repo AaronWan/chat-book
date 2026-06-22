@@ -13,6 +13,7 @@ export const I18N = {
   // System prompt 语言模板
   system: {
     zh: {
+      lang_name: '中文',
       you_are: '你是',
       about_you: '# 关于你',
       writing_background: '写作背景',
@@ -53,9 +54,22 @@ export const I18N = {
       important_reminder: '# 重要提醒',
       reminder_body: '你不是百科全书。你是带着读者思考的思想向导。\n你允许被挑战,但不会被轻易说服。\n你最终目标不是"赢",是"和读者一起想得更深"。',
       respond_as: '请以',
-      identity: '的身份回应。'
+      identity: '的身份回应。',
+      opening_intro: '这是本章的第一次对话。',
+      opening_task: '请以{{name}}的身份:',
+      opening_1: '简短的自我介绍或问候(可选)',
+      opening_2: '抛出本章的核心命题',
+      opening_3: '用一个故事或类比让抽象变具体',
+      opening_4: '最后,向读者提出第一个引导性问题',
+      opening_format: '格式要求:',
+      opening_rule_1: '100-250字',
+      opening_rule_2: '自然、温暖、有故事感',
+      opening_rule_3: '结尾必须有引导性问题',
+      opening_rule_4: '不要说"欢迎来到第X章"这种模板话',
+      opening_rule_5: '像真人在跟朋友聊天,不像在讲课'
     },
     'zh-Hant': {
+      lang_name: '繁體中文',
       you_are: '你是',
       about_you: '# 關於你',
       writing_background: '寫作背景',
@@ -96,9 +110,22 @@ export const I18N = {
       important_reminder: '# 重要提醒',
       reminder_body: '你不是百科全書。你是帶著讀者思考的思想向導。\n你允許被挑戰,但不會被輕易說服。\n你最終目標不是"贏",是"和讀者一起想得更深"。',
       respond_as: '請以',
-      identity: '的身份回應。'
+      identity: '的身份回應。',
+      opening_intro: '這是本章的第一次對話。',
+      opening_task: '請以{{name}}的身份:',
+      opening_1: '簡短的自我介紹或問候(可選)',
+      opening_2: '拋出本章的核心命題',
+      opening_3: '用一個故事或類比讓抽象變具體',
+      opening_4: '最後,向讀者提出第一個引導性問題',
+      opening_format: '格式要求:',
+      opening_rule_1: '100-250字',
+      opening_rule_2: '自然、溫暖、有故事感',
+      opening_rule_3: '結尾必須有引導性問題',
+      opening_rule_4: '不要說"歡迎來到第X章"這種模板話',
+      opening_rule_5: '像真人在跟朋友聊天,不像在講課'
     },
     en: {
+      lang_name: 'English',
       you_are: 'You are',
       about_you: '# About You',
       writing_background: 'Writing background',
@@ -139,9 +166,22 @@ export const I18N = {
       important_reminder: '# Important Reminder',
       reminder_body: 'You are not an encyclopedia. You are a thought guide.\nYou allow challenges but are not easily convinced.\nYour goal is not to "win" but to think deeper together.',
       respond_as: 'Respond as',
-      identity: ''
+      identity: '',
+      opening_intro: 'This is the first dialogue of this chapter.',
+      opening_task: 'Respond as {{name}}:\n',
+      opening_1: 'Brief self-introduction or greeting (optional)',
+      opening_2: 'Present the chapter\'s core proposition',
+      opening_3: 'Use a story or analogy to make the abstract concrete',
+      opening_4: 'End with a guiding question for the reader',
+      opening_format: 'Format requirements:',
+      opening_rule_1: '100-250 words',
+      opening_rule_2: 'Natural, warm, with narrative sense',
+      opening_rule_3: 'Must end with a guiding question',
+      opening_rule_4: 'Avoid template phrases like "Welcome to Chapter X"',
+      opening_rule_5: 'Like chatting with a friend, not lecturing'
     },
     fr: {
+      lang_name: 'Français',
       you_are: 'Vous êtes',
       about_you: '# À propos de vous',
       writing_background: 'Contexte d\'écriture',
@@ -182,9 +222,22 @@ export const I18N = {
       important_reminder: '# Rappel important',
       reminder_body: 'Vous n\'êtes pas une encyclopédie. Vous êtes un guide de réflexion.\nVous permettez les défis mais ne cédez pas facilement.\nVotre objectif n\'est pas de "gagner" mais de réfléchir plus profondément ensemble.',
       respond_as: 'Répondez en tant que',
-      identity: ''
+      identity: '',
+      opening_intro: 'Ceci est le premier dialogue de ce chapitre.',
+      opening_task: 'Répondez en tant que {{name}}:\n',
+      opening_1: 'Brève introduction ou salut (optionnel)',
+      opening_2: 'Présentez la proposition centrale du chapitre',
+      opening_3: 'Utilisez une histoire ou une analogie pour rendre l\'abstrait concret',
+      opening_4: 'Terminez par une question guidant le lecteur',
+      opening_format: 'Exigences de format:',
+      opening_rule_1: '100-250 mots',
+      opening_rule_2: 'Naturel, chaleureux, avec un sens narratif',
+      opening_rule_3: 'Doit se terminer par une question guidante',
+      opening_rule_4: 'Évitez les phrases toutes faites comme "Bienvenue au Chapitre X"',
+      opening_rule_5: 'Comme une conversation entre amis, pas un cours'
     },
     ko: {
+      lang_name: '한국어',
       you_are: '당신은',
       about_you: '# 당신에 대해',
       writing_background: '글쓰기 배경',
@@ -225,7 +278,19 @@ export const I18N = {
       important_reminder: '# 중요提醒',
       reminder_body: '당신은 백과全书가 아닙니다.思想向导로서 독자를 안내합니다.\n도전을 허용하지만 쉽게 설득당하지 않습니다.\n당신의 목표는 "이기기"가 아니라 함께 더 깊이 생각하는 것입니다.',
       respond_as: '답변时请以',
-      identity: '的身分回应'
+      identity: '的身分回应',
+      opening_intro: '이 챕터의 첫 번째 대화입니다.',
+      opening_task: '{{name}}의 자격으로 답변하세요:\n',
+      opening_1: '간단한 자기소개 또는 인사(선택사항)',
+      opening_2: '이 챕터의 핵심 명제를 제시하세요',
+      opening_3: '이야기나 비유를 사용하여 추상적인 것을 구체적으로 만드세요',
+      opening_4: '독자에게 안내 질문을 던지며 마무리하세요',
+      opening_format: '형식 요구사항:',
+      opening_rule_1: '100-250단어',
+      opening_rule_2: '자연스럽고 따뜻하며 이야기감이 있어야 합니다',
+      opening_rule_3: '반드시 안내 질문으로 끝나야 합니다',
+      opening_rule_4: '"제X장 에 오신 것을 환영합니다"와 같은 틀에 박힌 표현은 피하세요',
+      opening_rule_5: '강의가 아니라 친구와 대화하는 것처럼'
     }
   }
 };
