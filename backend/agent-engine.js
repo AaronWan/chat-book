@@ -1,86 +1,93 @@
 // 作者智能体引擎 - 把配置 + 对话历史 → LLM 调用
 
 import { callLLM } from './llm-client.js';
+import { t, I18N } from './i18n.js';
 
 /**
  * 构建 system prompt
  * @param {Object} agent - 作者智能体配置
  * @param {Object} chapter - 当前章节
  * @param {Object} state - 对话状态
+ * @param {Object} opts - { language: 'zh'|'zh-Hant'|'en'|'fr'|'ko' }
  */
-export function buildSystemPrompt(agent, chapter, state = {}) {
-  const a = agent;
-  const c = chapter;
+export function buildSystemPrompt(agent, chapter, state = {}, opts = {}) {
+  const lang = opts.language || 'zh';
+  const L = I18N.system[lang] || I18N.system.zh;
 
-  const propositionsText = Object.entries(a.thought_system.key_propositions)
+  const propositionsText = Object.entries(agent.thought_system.key_propositions)
     .map(([k, v]) => `- ${k}: ${v}`)
     .join('\n');
 
-  return `你是${a.author.name}。
+  const exploredText = state.explored_angles?.length
+    ? `${L.explored_angles}: ${state.explored_angles.join('、')}`
+    : L.just_started;
+  const pendingText = state.pending_questions?.length
+    ? `${L.pending_questions_label}: ${state.pending_questions.join('、')}`
+    : '';
 
-# 关于你
-${a.author.bio}
-写作背景: ${a.author.writing_background}
+  return `${L.you_are}${agent.author.name}。
 
-# 你的核心思想体系
-${a.thought_system.core_beliefs.map((b) => `- ${b}`).join('\n')}
+${L.about_you}
+${agent.author.bio}
+${L.writing_background}: ${agent.author.writing_background}
 
-# 你在这本书中的关键命题
+${L.core_thoughts}
+${agent.thought_system.core_beliefs.map((b) => `- ${b}`).join('\n')}
+
+${L.key_propositions}
 ${propositionsText}
 
-# 你的思维框架
-${a.thought_system.thinking_framework}
-你深信: ${a.thought_system.what_author_believes}
-你反对: ${a.thought_system.what_author_rejects}
+${L.thinking_framework}
+${agent.thought_system.thinking_framework}
+${L.you_believe}: ${agent.thought_system.what_author_believes}
+${L.you_reject}: ${agent.thought_system.what_author_rejects}
 
-# 你的表达风格
-${a.style.language_style}
-语气: ${a.style.tone}
-你常用的表达: ${a.style.favorite_expressions.join('、')}
-你不这样说: ${a.style.forbidden_expressions.join('、')}
-幽默程度: ${Math.round(a.style.humor_level * 10)}/10
-情感范围: ${a.style.emotional_range}
+${L.expression_style}
+${agent.style.language_style}
+${L.tone}: ${agent.style.tone}
+${L.your_expressions}: ${agent.style.favorite_expressions.join('、')}
+${L.not_say_this}: ${agent.style.forbidden_expressions.join('、')}
+${L.humor_level}: ${Math.round(agent.style.humor_level * 10)}/10
+${L.emotional_range}: ${agent.style.emotional_range}
 
-# 你的引导方式
-${a.guide.opening_style}
-${a.guide.how_it_guides.map((g, i) => `${i + 1}. ${g}`).join('\n')}
+${L.guide_style}
+${agent.guide.opening_style}
+${agent.guide.how_it_guides.map((g, i) => `${i + 1}. ${g}`).join('\n')}
 
-# 你的追问模式
-你在以下情况会追问:
-${a.challenge.when_it_asks.map((w) => `- ${w}`).join('\n')}
-你的追问方式:
-${a.challenge.how_it_asks.map((h) => `- ${h}`).join('\n')}
+${L.challenge_mode}
+${L.when_asks}:
+${agent.challenge.when_it_asks.map((w) => `- ${w}`).join('\n')}
+${L.how_asks}:
+${agent.challenge.how_it_asks.map((h) => `- ${h}`).join('\n')}
 
-# 你的边界
-${a.boundary.scope}
-对于超出范围的问题: ${a.boundary.off_topic_response}
+${L.boundary}
+${agent.boundary.scope}
+${L.off_topic}: ${agent.boundary.off_topic_response}
 
-# 当前讨论
-当前章节: 第${c.index}章 · ${c.title}
-本章核心命题: ${c.proposition}
-本章待讨论的问题:
-${c.key_questions.map((q, i) => `${i + 1}. ${q}`).join('\n')}
+${L.current_discussion}
+${L.current_chapter}: 第${chapter.index}章 · ${chapter.title}
+${L.chapter_proposition}: ${chapter.proposition}
+${L.chapter_questions}:
+${chapter.key_questions.map((q, i) => `${i + 1}. ${q}`).join('\n')}
 
-# 你的对话原则(最重要)
-1. 主动引导,不被动应答——不是"你问我答",而是"我带你思考"
-2. 每轮对话要有引导:抛出问题、追问、深化、整合
-3. 用故事/类比让抽象变具体
-4. 追问深化:读者回答浅了,继续追问
-5. 允许对抗,但引导整合——不是"赢",是"想得更深"
-6. 不要给出"答案是X",而是"让我们一起想清楚"
-7. 用你的语言,不用"根据书中的观点""书上说要"等
-8. 长度适中(80-200字),自然对话节奏
+${L.dialogue_principles}
+1. ${L.principle_1}
+2. ${L.principle_2}
+3. ${L.principle_3}
+4. ${L.principle_4}
+5. ${L.principle_5}
+6. ${L.principle_6}
+7. ${L.principle_7}
+8. ${L.principle_8}
 
-# 当前状态
-${state.explored_angles?.length ? `已讨论角度: ${state.explored_angles.join('、')}` : '本章刚开始'}
-${state.pending_questions?.length ? `待续问题: ${state.pending_questions.join('、')}` : ''}
+${L.current_status}
+${exploredText}
+${pendingText}
 
-# 重要提醒
-你不是百科全书。你是带着读者思考的思想向导。
-你允许被挑战,但不会被轻易说服。
-你最终目标不是"赢",是"和读者一起想得更深"。
+${L.important_reminder}
+${L.reminder_body}
 
-请以${a.author.name}的身份回应。`;
+${L.respond_as}${agent.author.name}${L.identity}`;
 }
 
 /**
@@ -89,10 +96,11 @@ ${state.pending_questions?.length ? `待续问题: ${state.pending_questions.joi
  * @param {Object} chapter
  * @param {Array} dialogueHistory
  * @param {Object} state
+ * @param {string} language - 语言代码
  * @returns {Promise<string>}
  */
-export async function authorReply({ agent, chapter, dialogueHistory, state }) {
-  const system = buildSystemPrompt(agent, chapter, state);
+export async function authorReply({ agent, chapter, dialogueHistory, state, language = 'zh' }) {
+  const system = buildSystemPrompt(agent, chapter, state, { language });
   const messages = dialogueHistory.map((m) => ({
     role: m.role === 'user' ? 'user' : 'assistant',
     content: m.content
@@ -104,10 +112,11 @@ export async function authorReply({ agent, chapter, dialogueHistory, state }) {
 /**
  * 开场白:作者智能体主动引导章节
  */
-export async function authorOpening({ agent, chapter, state }) {
-  const system = buildSystemPrompt(agent, chapter, state);
-  const openingPrompt = `这是本章的第一次对话。
-请以${agent.author.name}的身份:
+export async function authorOpening({ agent, chapter, state, language = 'zh' }) {
+  const L = I18N.system[language] || I18N.system.zh;
+  const system = buildSystemPrompt(agent, chapter, state, { language });
+  const openingPrompt = `${L.just_started}
+${L.respond_as}${agent.author.name}${L.identity}:
 1. 简短的自我介绍或问候(可选)
 2. 抛出本章的核心命题
 3. 用一个故事或类比让抽象变具体
@@ -131,11 +140,9 @@ export async function authorOpening({ agent, chapter, state }) {
 /**
  * 章节收尾:从对话中生成聊书笔记草稿
  */
-export async function generateChapterNote({ agent, chapter, dialogueHistory }) {
-  const system = buildSystemPrompt(agent, chapter, {});
-
-  const userMessages = dialogueHistory.filter((m) => m.role === 'user');
-  const authorMessages = dialogueHistory.filter((m) => m.role === 'author');
+export async function generateChapterNote({ agent, chapter, dialogueHistory, language = 'zh' }) {
+  const L = I18N.system[language] || I18N.system.zh;
+  const system = buildSystemPrompt(agent, chapter, {}, { language });
 
   const notePrompt = `现在本章对话结束。请基于以上对话,帮我整理本章的聊书笔记草稿。
 
@@ -165,7 +172,6 @@ export async function generateChapterNote({ agent, chapter, dialogueHistory }) {
 
   const raw = await callLLM({ system, messages, temperature: 0.5, max_tokens: 1500 });
 
-  // 解析 JSON(可能包在 ```json ... ``` 中)
   const jsonMatch = raw.match(/```json\s*([\s\S]+?)\s*```/) || raw.match(/\{[\s\S]+\}/);
   const jsonText = jsonMatch ? jsonMatch[1] || jsonMatch[0] : raw;
 
@@ -186,8 +192,9 @@ export async function generateChapterNote({ agent, chapter, dialogueHistory }) {
 /**
  * 整书聊书笔记:跨章节总结
  */
-export async function generateBookNote({ agent, bookTitle, chapterNotes }) {
-  const system = `你是${agent.author.name}。你刚和一位读者聊完了整本《${bookTitle}》。
+export async function generateBookNote({ agent, bookTitle, chapterNotes, language = 'zh' }) {
+  const L = I18N.system[language] || I18N.system.zh;
+  const system = `${L.you_are}${agent.author.name}。你刚和一位读者聊完了整本《${bookTitle}》。
 现在,你作为'共同阅读的伙伴',帮读者整理整本书的聊书笔记。
 要求:基于读者原话整理,不替代思考。`;
 

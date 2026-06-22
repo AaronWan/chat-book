@@ -140,13 +140,16 @@ router.post('/user/chapter/start', async (req, res) => {
   const chapter = getChapter(book_id, chapter_index);
   if (!agent || !chapter) return res.status(404).json({ error: '智能体或章节不存在' });
 
+  const user = storage.ensureUser(userId);
+  const language = user.settings?.language || 'zh';
+
   const userChapter = storage.ensureUserChapter(userId, book_id, chapter_index);
   const existingDialogue = storage.getDialogue(userId, book_id, chapter_index);
 
   // 如果是新章节,生成开场白
   if (existingDialogue.length === 0) {
     try {
-      const opening = await authorOpening({ agent, chapter, state: userChapter });
+      const opening = await authorOpening({ agent, chapter, state: userChapter, language });
       const msg = storage.appendDialogueMessage(userId, book_id, chapter_index, {
         role: 'author',
         content: opening
@@ -175,6 +178,9 @@ router.post('/user/chapter/message', async (req, res) => {
   const chapter = getChapter(book_id, chapter_index);
   if (!agent || !chapter) return res.status(404).json({ error: '智能体或章节不存在' });
 
+  const user = storage.ensureUser(userId);
+  const language = user.settings?.language || 'zh';
+
   // 1. 存用户消息
   const userMsg = storage.appendDialogueMessage(userId, book_id, chapter_index, { role: 'user', content });
 
@@ -198,7 +204,8 @@ router.post('/user/chapter/message', async (req, res) => {
       state: {
         explored_angles: updatedChapter.explored_angles || [],
         pending_questions: updatedChapter.pending_questions || []
-      }
+      },
+      language
     });
 
     // 5. 存作者消息
@@ -256,8 +263,11 @@ router.post('/user/chapter/close', async (req, res) => {
   const dialogue = storage.getDialogue(userId, book_id, chapter_index);
   if (dialogue.length < 2) return res.status(400).json({ error: '对话轮数过少,无法生成笔记' });
 
+  const user = storage.ensureUser(userId);
+  const language = user.settings?.language || 'zh';
+
   try {
-    const noteContent = await generateChapterNote({ agent, chapter, dialogueHistory: dialogue });
+    const noteContent = await generateChapterNote({ agent, chapter, dialogueHistory: dialogue, language });
     const note = storage.saveNote(userId, book_id, chapter_index, noteContent);
 
     // 更新章节状态
@@ -334,8 +344,11 @@ router.post('/user/book/:book_id/note/close', async (req, res) => {
 
   if (chapterNotes.length === 0) return res.status(400).json({ error: '没有已完成的章节' });
 
+  const user = storage.ensureUser(userId);
+  const language = user.settings?.language || 'zh';
+
   try {
-    const summary = await generateBookNote({ agent, bookTitle: book.title, chapterNotes });
+    const summary = await generateBookNote({ agent, bookTitle: book.title, chapterNotes, language });
     const totalTurns = userChapters.reduce((sum, c) => sum + (c.dialogue_turns || 0), 0);
     const allInsights = chapterNotes.flatMap((c) => c.core_insights || []);
 

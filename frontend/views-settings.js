@@ -25,6 +25,15 @@ export async function renderSettings(container) {
   }
 
   const currentTheme = settings.theme || localStorage.getItem('liaoshu_theme') || 'paper';
+  const currentLang = settings.language || 'zh';
+
+  const LANGUAGES = [
+    { code: 'zh', label: '中文', flag: '🇨🇳' },
+    { code: 'zh-Hant', label: '繁體', flag: '🇭🇰' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
+    { code: 'ko', label: '한국어', flag: '🇰🇷' }
+  ];
 
   const goalInput = el('input', {
     id: 'goal-minutes',
@@ -63,6 +72,7 @@ export async function renderSettings(container) {
   ];
   const themeCardsWrap = el('div', { class: 'grid grid-cols-1 sm:grid-cols-3 gap-3' });
   let selectedTheme = currentTheme;
+  let selectedLang = currentLang;
   const renderThemeCards = () => {
     themeCardsWrap.innerHTML = '';
     themes.forEach((t) => {
@@ -164,18 +174,49 @@ export async function renderSettings(container) {
         ])
       ]),
 
-      // Section III — 外观
+      // Section III — 语言
       el('section', { class: 'mb-6' }, [
-        sectionHeader({ title: '外观主题', num: 'III · 03' }),
+        sectionHeader({ title: '对话语言', num: 'III · 03' }),
+        el('div', { class: 'lc-card p-6' }, [
+          el('div', { class: 'lc-caption mb-4' }, '选择作者智能体与你对话使用的语言。'),
+          el('div', { class: 'grid grid-cols-1 sm:grid-cols-5 gap-3' }, (() => {
+            const wrap = el('div', {});
+            const renderLangCards = () => {
+              wrap.innerHTML = '';
+              LANGUAGES.forEach((lang) => {
+                const active = selectedLang === lang.code;
+                wrap.appendChild(el('button', {
+                  class: 'lc-card p-4 text-center lc-hover ' + (active ? 'lc-card-warm' : ''),
+                  style: active ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 2px var(--accent)' } : {},
+                  onclick: () => {
+                    selectedLang = lang.code;
+                    renderLangCards();
+                  }
+                }, [
+                  el('div', { style: { fontSize: '24px', marginBottom: '4px' } }, lang.flag),
+                  el('div', { class: 'text-sm font-medium' }, lang.label),
+                  active ? el('div', { class: 'lc-chip lc-chip-accent mt-1', style: { fontSize: '10px', padding: '1px 6px' } }, '✓') : null
+                ]));
+              });
+            };
+            renderLangCards();
+            return [wrap];
+          })())
+        ])
+      ]),
+
+      // Section IV — 外观
+      el('section', { class: 'mb-6' }, [
+        sectionHeader({ title: '外观主题', num: 'IV · 04' }),
         el('div', { class: 'lc-card p-6' }, [
           el('div', { class: 'lc-caption mb-4' }, '点击预览,保存后即生效。'),
           themeCardsWrap
         ])
       ]),
 
-      // Section IV — 数据
+      // Section V — 数据
       el('section', { class: 'mb-6' }, [
-        sectionHeader({ title: '数据', num: 'IV · 04' }),
+        sectionHeader({ title: '数据', num: 'V · 05' }),
         el('div', { class: 'lc-card p-6 space-y-2' }, [
           el('button', {
             class: 'lc-row-btn w-full',
@@ -231,7 +272,8 @@ export async function renderSettings(container) {
               weekly_target_books: parseInt(document.getElementById('weekly-target').value, 10),
               notifications_enabled: document.getElementById('notifications').checked,
               reminder_time: document.getElementById('reminder-time').value,
-              theme: selectedTheme
+              theme: selectedTheme,
+              language: selectedLang
             };
             try {
               await api.updateSettings(newSettings);
