@@ -1,0 +1,94 @@
+Business Source License 1.1 (BSL 1.1)
+
+Grant of Copyright License
+
+Copyright (c) 2025-2026 Liaoshu Project
+
+The Licensor hereby grants you the right to access, use, copy, modify,
+and distribute this software and associated documentation files (the "Software"),
+subject to the terms and conditions of this Business Source License Agreement
+(the "Agreement").
+
+Definitions
+
+"Software" means the software and related documentation, including source code,
+exemplary prompts, templates, and configuration files, distributed as part
+of the Liaoshu (聊书) open source project.
+
+"Licensed Use" means the exercise of the rights granted in this Section 1.1
+without the payment of royalties, fees, or other consideration.
+
+"Effective Date" means the date of the original download or copy of the
+Software by you, whichever is earlier.
+
+Grant of Rights
+
+Permission to copy, modify, distribute, and use the Software for
+non-commercial research, personal education, and learning purposes
+is hereby granted without fee, provided that the following conditions
+are met:
+
+  1. The above copyright notice and this permission notice shall be
+     included in all copies or substantial portions of the Software.
+
+  2. The Software shall be used for lawful purposes only. Any use
+     that violates applicable law is prohibited.
+
+  3. This Agreement shall be reproduced in all copies of this
+     LICENSE file that accompany distributions of the Software.
+
+Grant of Rights — Commercial Use Restriction
+
+THE FOLLOWING RIGHT IS GRANTED ONLY UNDER THE TERMS AND CONDITIONS
+OF A SEPARATE WRITTEN COMMERCIAL LICENSE AGREEMENT EXECUTED BY
+AND BETWEEN YOU (OR YOUR ENTITY) AND THE LICENSOR:
+
+  Permission to use, copy, modify, distribute, and create derivative
+  works of the Software for purposes of operating a commercial
+  software-as-a-service (SaaS), application service provider (ASP),
+  or other for-profit hosting or deployment of the Software — whether
+  in whole or in part, and whether hosted by you or by a third party
+  on your behalf — is NOT permitted under this BSL 1.1 license.
+
+  To obtain such permission, contact the Licensor at the address
+  below to negotiate a commercial license agreement.
+
+Automatic Licensing After Five Years
+
+Beginning five (5) years after the Effective Date, this Agreement
+and the rights granted hereunder shall automatically convert to
+the terms and conditions of the Apache License, Version 2.0
+(https://www.apache.org/licenses/LICENSE-2.0). At that time,
+the Commercial Use Restriction in Section 2 above shall no longer
+apply, and the Software shall be free to use for any purpose
+consistent with the Apache License, Version 2.0.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+Contact
+
+To discuss commercial licensing, contact:
+Liaoshu Project — https://github.com/liaoshu-project/chat-book
+
+---
+
+Note on Included Data
+
+The directory `data/books/builtin-books.json` distributed with this
+Software contains only bibliographic metadata (book titles, author
+names, ISBNs, category tags, and brief public descriptions). It does
+NOT include full book content, chapter text, or author agent prompt
+configurations. Author agent configurations are stored separately
+in `data/agents/` and are explicitly excluded from this repository
+due to third-party copyright claims on the underlying books.
+
+If you have rights to any book referenced in the project and wish
+to contribute its author agent configuration, please contact the
+Licensor to arrange a separate contributor agreement.

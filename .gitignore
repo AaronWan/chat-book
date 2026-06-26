@@ -1,9 +1,17 @@
 node_modules/
 .env
-data/users/*.json
+data/users/
 data/dialogues/
+data/notes/
+data/drafts/
+data/uploads/
+data/user-books/
 *.log
 .DS_Store
 
 # Python bytecode cache
 __pycache__/
+
+# Author agent configs — contain copyrighted prompt/IP content
+# Do NOT commit to public repositories
+data/agents/
